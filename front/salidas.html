@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos de Salida INVENTX</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos adicionales */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('imagenes/BAR3.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+        .logo {
+            width: 150px;
+        }
+        .footer {
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 0;
+            background-color: rgba(0, 0, 0, 0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="imagenes/logo.JPG" alt="Logo" class="logo">
+    </div>
+    <div class="report-container">
+        <!-- Aquí se aplica el estilo al h1 -->
+        <h1 class="report-header">Movimientos de Salida</h1>
+        <form class="report-form">
+            <label class="report-label" for="fechaInicio">Fecha Inicio:</label>
+            <input class="report-input" type="date" id="fechaInicio" name="fechaInicio" required>
+            <label class="report-label" for="fechaFin">Fecha Fin:</label>
+            <input class="report-input" type="date" id="fechaFin" name="fechaFin" required>
+            <button class="report-button" id="generarReporte">Generar Reporte</button>
+            <button class="report-button" id="exportarExcel">Exportar a Excel</button>
+            
+            <button class="report-button home-button" onclick="window.location.href='index.html'">Home</button>
+  
+
+        </form>
+        <div id="resultados"></div>
+    </div>
+    <!-- Pie de página -->
+  
+    <script>
+        // JavaScript
+    </script>
+    <br>
+    <br>
+      <p class="footer">&copy; X Developer Team-2024</p>
+</body>
+</html>

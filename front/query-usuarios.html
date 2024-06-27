@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Usuarios</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos adicionales para el fondo, el logo y el pie de página */
+        body {
+            background-image: url('imagenes/BAR3.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .logo {
+            width: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="imagenes/logo.JPG" alt="Logo" class="logo">
+    </div>
+    <!-- Contenido de la página -->
+    <div class="container">
+        <h1>Consulta de Usuarios</h1>
+        <button onclick="obtenerUsuarios()">Generar Reporte</button>
+        <div id="resultados"></div>
+    </div>
+    <!-- Pie de página -->
+    <p class="footer">&copy; X Developer Team-2024</p>
+    <!-- Botón Home -->
+    <button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button>
+</body>
+
+</html>

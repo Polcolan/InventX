@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Movimientos de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('imagenes/BAR3.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .logo {
+            width: 150px;
+        }
+
+        .report-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: rgb(14, 11, 6);
+            font-weight: bold;
+        }
+
+        .report-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .report-label {
+            margin: 5px 0;
+        }
+
+        .report-input {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .report-button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .report-select {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .report-th,
+        .report-td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .report-th {
+            background-color: orange;
+            color: white;
+        }
+
+        .report-tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .report-tr:hover {
+            background-color: #ddd;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        async function obtenerProductos() {
+            try {
+                const response = await fetch('http://localhost:3000/productos');
+                const productos = await response.json();
+                const productoSelect = document.getElementById('producto');
+                productos.forEach(producto => {
+                    const option = document.createElement('option');
+                    option.value = producto.id;
+                    option.textContent = producto.nombre;
+                    productoSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error obteniendo los productos:', error);
+            }
+        }
+
+        async function obtenerReporte() {
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+            const productoId = document.getElementById('producto').value;
+
+            if (!fechaInicio || !fechaFin) {
+                alert('Por favor, ingrese ambas fechas.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/reportes?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&productoId=${productoId}`);
+                const movimientos = await response.json();
+                mostrarMovimientos(movimientos);
+            } catch (error) {
+                console.error('Error obteniendo los movimientos:', error);
+            }
+        }
+
+        function mostrarMovimientos(movimientos) {
+            const resultadosDiv = document.getElementById('resultados');
+            resultadosDiv.innerHTML = '';
+
+            if (movimientos.length === 0) {
+                resultadosDiv.innerHTML = '<p>No se encontraron movimientos en el rango de fechas proporcionado.</p>';
+                return;
+            }
+
+            const table = document.createElement('table');
+            table.className = 'report-table';
+
+            const headerRow = document.createElement('tr');
+            headerRow.className = 'report-tr';
+            const headers = ['ID Producto', 'Cédula Usuario', 'Tipo Movimiento', 'Cantidad', 'Fecha'];
+            headers.forEach(headerText => {
+                const header = document.createElement('th');
+                header.className = 'report-th';
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
+            table.appendChild(headerRow);
+
+            movimientos.forEach(movimiento => {
+                const row = document.createElement('tr');
+                row.className = 'report-tr';
+
+                const cellIdProducto = document.createElement('td');
+                cellIdProducto.className = 'report-td';
+                cellIdProducto.textContent = movimiento.id_producto;
+                row.appendChild(cellIdProducto);
+
+                const cellCedulaUsuario = document.createElement('td');
+                cellCedulaUsuario.className = 'report-td';
+                cellCedulaUsuario.textContent = movimiento.cedula_usuario;
+                row.appendChild(cellCedulaUsuario);
+
+                const cellTipoMovimiento = document.createElement('td');
+                cellTipoMovimiento.className = 'report-td';
+                cellTipoMovimiento.textContent = movimiento.tipo_movimiento;
+                row.appendChild(cellTipoMovimiento);
+
+                const cellCantidad = document.createElement('td');
+                cellCantidad.className = 'report-td';
+                cellCantidad.textContent = movimiento.cantidad;
+                row.appendChild(cellCantidad);
+
+                const cellFecha = document.createElement('td');
+                cellFecha.className = 'report-td';
+                cellFecha.textContent = new Date(movimiento.fecha).toLocaleString();
+                row.appendChild(cellFecha);
+
+                table.appendChild(row);
+            });
+
+            resultadosDiv.appendChild(table);
+        }
+
+        async function exportarExcel() {
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+            const productoId = document.getElementById('producto').value;
+
+            if (!fechaInicio || !fechaFin) {
+                alert('Por favor, ingrese ambas fechas.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/exportar-excel?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&productoId=${productoId}`);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'reporte_movimientos.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } catch (error) {
+                console.error('Error exportando el reporte a Excel:', error);
+            }
+        }
+
+        window.onload = obtenerProductos;
+    </script>
+</head>
+
+<body>
+    <div class="report-container">
+        <div class="logo-container">
+            <img src="imagenes/logo.JPG" alt="Logo" class="logo">
+        </div>
+        <h1 class="report-header">Reporte de Movimientos de Productos</h1>
+        <form class="report-form" onsubmit="event.preventDefault(); obtenerReporte();">
+            <label class="report-label" for="producto">Producto:</label>
+            <select class="report-select" id="producto" name="producto" required>
+                <option value="" disabled selected>Seleccione un producto</option>
+            </select>
+            <label class="report-label" for="fechaInicio">Fecha Inicio:</label>
+            <input class="report-input" type="date" id="fechaInicio" name="fechaInicio" required>
+            <label class="report-label" for="fechaFin">Fecha Fin:</label>
+            <input class="report-input" type="date" id="fechaFin" name="fechaFin" required>
+            <button class="report-button" type="submit">Generar Reporte</button>
+            <button class="report-button" type="button" onclick="exportarExcel()">Exportar a Excel</button>
+            <button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button>
+        </form>
+        <div id="resultados"></div>
+    </div>
+    <p class="footer">&copy; X Developer Team-2024</p>
+</body>
+
+</html>
